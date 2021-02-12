@@ -31,39 +31,6 @@ class Connector
         on_preferences {
           display_about_dialog
         }
-        on_swt_keydown { |event|
-          begin
-            character = event.keyCode.chr rescue nil
-            if event.stateMask == swt(COMMAND) && character == 'd'
-              @web_url_text.select_all
-              @web_url_text.set_focus
-            elsif Glimmer::SWT::SWTProxy.include?(event.stateMask, COMMAND, :shift) && character == '['
-              new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
-              @tab_folder.selection = new_selection_index
-            elsif Glimmer::SWT::SWTProxy.include?(event.stateMask, COMMAND, :shift) && character == ']'
-              new_selection_index = (@tab_folder.selection_index + 1) % (@tab_folder.items.size - 1)
-              @tab_folder.selection = new_selection_index
-            elsif event.stateMask == swt(COMMAND) && character == '['
-              current_tab_browser.back
-            elsif event.stateMask == swt(COMMAND) && character == ']'
-              current_tab_browser.forward
-            elsif event.stateMask == swt(COMMAND) && character == 'r'
-              current_tab_browser.refresh
-            elsif event.stateMask == swt(COMMAND) && character == 's'
-              current_tab_browser.stop
-            elsif event.stateMask == swt(COMMAND) && character == 't'
-              add_tab_browser
-            elsif event.stateMask == swt(COMMAND) && character == 'w'
-              new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
-              current_tab_item.dispose
-              @tab_folder.selection = new_selection_index
-            elsif event.stateMask == swt(COMMAND) && character == 'n'
-              app_view.open
-            end
-          rescue => e
-            pd e
-          end
-        }
       }
     }
 
@@ -105,6 +72,7 @@ class Connector
             text '>'
             on_widget_selected {current_tab_browser.forward}
           }
+          # TODO enable the following after adding FontAwesome and using for Refresh and Stop
 #           button {
 #             text 'R'
 #             on_widget_selected {current_tab_browser.refresh}
@@ -155,13 +123,116 @@ class Connector
           menu {
             text '&File'
             menu_item {
-              text '&About...'
+              text 'New &Tab'
+              accelerator COMMAND, 't'
+              
               on_widget_selected {
-                display_about_dialog
+                add_tab_browser
               }
             }
             menu_item {
-              text '&Preferences...'
+              text 'New &Window'
+              accelerator COMMAND, 'n'
+              
+              on_widget_selected {
+                app_view.open
+              }
+            }
+            menu_item(:separator)
+            menu_item {
+              text '&Close Tab'
+              accelerator COMMAND, 'w'
+              
+              on_widget_selected {
+                new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
+                current_tab_item.dispose
+                @tab_folder.selection = new_selection_index
+              }
+            }
+            menu_item {
+              text 'C&lose Window'
+              accelerator COMMAND, :alt, 'q'
+              
+              on_widget_selected {
+                current_shell.close
+              }
+            }
+            # Enable the following once preferences are truly implemented
+#             menu_item(:separator)
+#             menu_item {
+#               text '&Preferences...'
+#               accelerator COMMAND, ','
+#
+#               on_widget_selected {
+#                 display_about_dialog
+#               }
+#             }
+          }
+          menu {
+            text '&Action'
+            menu_item {
+              text '&Back'
+              accelerator(*(OS.mac? ? [COMMAND, '['] : [:alt, :arrow_left]))
+              
+              on_widget_selected {
+                current_tab_browser.back
+              }
+            }
+            menu_item {
+              text '&Forward'
+              accelerator(*(OS.mac? ? [COMMAND, ']'] : [:alt, :arrow_right]))
+              
+              on_widget_selected {
+                current_tab_browser.forward
+              }
+            }
+            menu_item {
+              text '&Go To Address Bar'
+              accelerator COMMAND, (OS.mac? ? 'l' : 'd')
+              
+              on_widget_selected {
+                @web_url_text.set_focus
+              }
+            }
+            menu_item {
+              text '&Next Tab'
+              accelerator COMMAND, :shift, ']'
+              
+              on_widget_selected {
+                @tab_folder.selection = (@tab_folder.selection_index + 1) % (@tab_folder.items.size - 1)
+              }
+            }
+            menu_item {
+              text '&Previous Tab'
+              accelerator COMMAND, :shift, '['
+              
+              on_widget_selected {
+                @tab_folder.selection = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
+              }
+            }
+            menu_item {
+              text '&Refresh'
+              accelerator COMMAND, 'r'
+              
+              on_widget_selected {
+                current_tab_browser.refresh
+              }
+            }
+            menu_item {
+              text '&Stop'
+              accelerator COMMAND, 's'
+              
+              on_widget_selected {
+                current_tab_browser.stop
+              }
+            }
+          }
+          menu {
+            text '&Help'
+            menu_item {
+              text '&About...'
+              accelerator COMMAND, :shift, 'a'
+              
               on_widget_selected {
                 display_about_dialog
               }
@@ -183,8 +254,6 @@ class Connector
             current_tab_item.swt_tab_item.text = domain
             @tab_folder.redraw
             body_root.pack_same_size
-            @tab_folder.redraw
-            body_root.pack_same_size
           end
         }
         
@@ -192,6 +261,10 @@ class Connector
           body_root.text = "Connector (#{event.title})"
         }
       }
+    end
+    
+    def current_shell
+      display.focus_control.shell&.get_data('custom_shell')
     end
     
     def current_tab_browser

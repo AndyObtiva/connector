@@ -4,6 +4,14 @@ A minimalist open-source web browser built in [Ruby](https://www.ruby-lang.org) 
 
 ![Mac Screenshot](images/connector-mac.png)
 
+## Change Log
+
+[CHANGELOG.md](CHANGELOG.md)
+
+## TODO
+
+[TODO.md](TODO.md)
+
 ## Contributing to connector
 
 -   Check out the latest master to make sure the feature hasn't been
@@ -30,4 +38,4 @@ Copyright (c) 2021 Andy Maleh
 
 [<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=40 />](https://github.com/AndyObtiva/glimmer-dsl-swt) Built with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt) (JRuby Desktop Development GUI Framework)
 
-Gladiator icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+Connector icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>

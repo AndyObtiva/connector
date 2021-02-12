@@ -1,11 +1,14 @@
 # TODO
 
-- CMD+n (opens a new window)
-- CMD+w (closes current tab)
+## Next (1.0.0)
+
 - CMD+click (opens a new tab with the URL)
-- CMD+SHIFT+] on Mac / CMD+PGDN on Windows/Linux (next tab)
-- CMD+SHIFT+[ on Mac / CMD+PGUP on Windows/Linux (previous tab)
 - Right click menu for right-clicking a link
 - Switch to using c_tab_folder/c_tab_item
 - Use Nebula FontAwesome for Back/Forward buttons
 - CMD+F (find dialog)
+- Remember last open tabs
+- History
+- connector-setup (to work across Rubies in RVM)
+- Chromium
+- Ability to change engine on any platform through preferences
