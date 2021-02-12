@@ -1,9 +1,10 @@
-connector===================
+# Connector
 
-Description goes here.
+A minimalist web browser built in [Ruby](https://www.ruby-lang.org) with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt)
 
-Contributing to connector
-------------------------------------------
+![Mac Screenshot](images/connector-mac.png)
+
+## Contributing to connector
 
 -   Check out the latest master to make sure the feature hasn't been
     implemented or the bug hasn't been fixed yet.
@@ -19,8 +20,12 @@ Contributing to connector
     is fine, but please isolate to its own commit so I can cherry-pick
     around it.
 
-Copyright
----------
+## Copyright
 
-Copyright (c) 2021 Andy Maleh. See
-LICENSE.txt for further details.
+[MIT](LICENSE.txt)
+
+Copyright (c) 2021 Andy Maleh
+
+---
+
+[<img src="https://raw.githubusercontent.com/AndyObtiva/glimmer/master/images/glimmer-logo-hi-res.png" height=40 />](https://github.com/AndyObtiva/glimmer-dsl-swt) Built with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt) (JRuby Desktop Development GUI Framework)
