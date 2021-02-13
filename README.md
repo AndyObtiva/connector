@@ -4,7 +4,7 @@ A minimalist open-source web browser built in [Ruby](https://www.ruby-lang.org) 
 
 ![Mac Screenshot](images/connector-mac.png)
 
-NOTE: this project is very new and has not had a release yet. Feel free to inspect its code to learn more about how to get started in building a web browser with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt).
+NOTE: this project was created primarily for personal use and has not had a release yet. Feel free to inspect its code to learn more about how to get started in building a web browser with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt).
 
 ## Change Log
 
