@@ -1,4 +1,4 @@
-require 'pd'
+require 'glimmer-cw-browser-chromium'
 
 class Connector
   class AppView
@@ -124,7 +124,7 @@ class Connector
             text '&File'
             menu_item {
               text 'New &Tab'
-              accelerator COMMAND, 't'
+              accelerator swt(COMMAND, 't'.bytes.first)
               
               on_widget_selected {
                 add_tab_browser
@@ -132,7 +132,7 @@ class Connector
             }
             menu_item {
               text 'New &Window'
-              accelerator COMMAND, 'n'
+              accelerator swt(COMMAND, 'n'.bytes.first)
               
               on_widget_selected {
                 app_view.open
@@ -141,7 +141,7 @@ class Connector
             menu_item(:separator)
             menu_item {
               text '&Close Tab'
-              accelerator COMMAND, 'w'
+              accelerator swt(COMMAND, 'w'.bytes.first)
               
               on_widget_selected {
                 new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
@@ -151,7 +151,7 @@ class Connector
             }
             menu_item {
               text 'C&lose Window'
-              accelerator COMMAND, :alt, 'q'
+              accelerator swt(COMMAND, :alt, 'q'.bytes.first)
               
               on_widget_selected {
                 current_shell.close
@@ -172,7 +172,7 @@ class Connector
             text '&Action'
             menu_item {
               text '&Back'
-              accelerator(*(OS.mac? ? [COMMAND, '['] : [:alt, :arrow_left]))
+              accelerator(*(OS.mac? ? swt(COMMAND, '['.bytes.first) : swt(:alt, :arrow_left.bytes.first)))
               
               on_widget_selected {
                 current_tab_browser.back
@@ -180,7 +180,7 @@ class Connector
             }
             menu_item {
               text '&Forward'
-              accelerator(*(OS.mac? ? [COMMAND, ']'] : [:alt, :arrow_right]))
+              accelerator(*(OS.mac? ? swt(COMMAND, ']'.bytes.first) : swt(:alt, :arrow_right.bytes.first)))
               
               on_widget_selected {
                 current_tab_browser.forward
@@ -188,7 +188,7 @@ class Connector
             }
             menu_item {
               text '&Go To Address Bar'
-              accelerator COMMAND, (OS.mac? ? 'l' : 'd')
+              accelerator swt(COMMAND, (OS.mac? ? 'l' : 'd').bytes.first)
               
               on_widget_selected {
                 @web_url_text.set_focus
@@ -196,7 +196,7 @@ class Connector
             }
             menu_item {
               text '&Next Tab'
-              accelerator COMMAND, :shift, ']'
+              accelerator swt(COMMAND, :shift, ']'.bytes.first)
               
               on_widget_selected {
                 @tab_folder.selection = (@tab_folder.selection_index + 1) % (@tab_folder.items.size - 1)
@@ -204,7 +204,7 @@ class Connector
             }
             menu_item {
               text '&Previous Tab'
-              accelerator COMMAND, :shift, '['
+              accelerator swt(COMMAND, :shift, '['.bytes.first)
               
               on_widget_selected {
                 @tab_folder.selection = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
@@ -212,7 +212,7 @@ class Connector
             }
             menu_item {
               text '&Refresh'
-              accelerator COMMAND, 'r'
+              accelerator swt(COMMAND, 'r'.bytes.first)
               
               on_widget_selected {
                 current_tab_browser.refresh
@@ -220,7 +220,7 @@ class Connector
             }
             menu_item {
               text '&Stop'
-              accelerator COMMAND, 's'
+              accelerator swt(COMMAND, 's'.bytes.first)
               
               on_widget_selected {
                 current_tab_browser.stop
@@ -231,7 +231,7 @@ class Connector
             text '&Help'
             menu_item {
               text '&About...'
-              accelerator COMMAND, :shift, 'a'
+              accelerator swt(COMMAND, :shift, 'a'.bytes.first)
               
               on_widget_selected {
                 display_about_dialog
@@ -243,7 +243,7 @@ class Connector
     }
     
     def tab_browser
-      browser { |browser_proxy|
+      browser(:chromium) { |browser_proxy|
         layout_data :fill, :fill, true, true
         url "https://duckduckgo.com"
         

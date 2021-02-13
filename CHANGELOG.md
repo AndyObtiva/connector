@@ -15,3 +15,4 @@
 - CMD+W: Close current tab
 - CMD+SHIFT+] on Mac / CMD+PGDN on Windows/Linux (next tab)
 - CMD+SHIFT+[ on Mac / CMD+PGUP on Windows/Linux (previous tab)
+- Use Chromium Engine

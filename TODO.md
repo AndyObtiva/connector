@@ -10,5 +10,4 @@
 - Remember last open tabs
 - History
 - connector-setup (to work across Rubies in RVM)
-- Chromium
 - Ability to change engine on any platform through preferences
