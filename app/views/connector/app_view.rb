@@ -1,21 +1,36 @@
+require 'pd'
 require 'glimmer-cw-browser-chromium'
 
 class Connector
   class AppView
     include Glimmer::UI::CustomShell
     
+    APP_ROOT = ::File.expand_path('../../..', __dir__)
+    ICON = File.join(APP_ROOT, 'package', 'linux', "Connector.png")
     COMMAND = OS.mac? ? :command : :ctrl
     CONTROL = OS.mac? ? :ctrl : :alt
-    
+        
     ## Add options like the following to configure CustomShell by outside consumers
     #
     # options :title, :background_color
     # option :width, default: 320
     # option :height, default: 240
-    # option :greeting, default: 'Hello, World!'
+    option :engine, default: 'chromium'
     
     attr_accessor :web_url
-
+    
+    def engine_options
+      ['chromium', 'webkit']
+    end
+    
+    def chromium?
+      engine.to_s == 'chromium'
+    end
+    
+    def webkit?
+      engine.to_s == 'webkit'
+    end
+    
     ## Use before_body block to pre-initialize variables to use in body
     #
     #
@@ -52,7 +67,7 @@ class Connector
         }
         # Replace example content below with custom shell content
         minimum_size 1024, 768
-        image File.join(APP_ROOT, 'package', 'linux', "Connector.png")
+        image ICON
         text "Connector"
       
         composite {
@@ -158,15 +173,15 @@ class Connector
               }
             }
             # Enable the following once preferences are truly implemented
-#             menu_item(:separator)
-#             menu_item {
-#               text '&Preferences...'
-#               accelerator COMMAND, ','
-#
-#               on_widget_selected {
-#                 display_about_dialog
-#               }
-#             }
+            menu_item(:separator)
+            menu_item {
+              text '&Preferences...'
+              accelerator swt(COMMAND, ','.bytes.first)
+
+              on_widget_selected {
+                display_preferences_dialog
+              }
+            }
           }
           menu {
             text '&Action'
@@ -243,13 +258,13 @@ class Connector
     }
     
     def tab_browser
-      browser(:chromium) { |browser_proxy|
+      browser(engine) { |browser_proxy|
         layout_data :fill, :fill, true, true
         url "https://duckduckgo.com"
         
-        on_changed {
+        on_changing { |event|
           if !@starting
-            self.web_url = browser_proxy.url
+            self.web_url = event.location
             domain = self.web_url.sub(/https?:\/\//, '').split('/').first
             current_tab_item.swt_tab_item.text = domain
             @tab_folder.redraw
@@ -257,7 +272,7 @@ class Connector
           end
         }
         
-        browser_proxy.swt_widget.add_title_listener { |event|
+        browser_proxy.add_title_listener { |event|
           body_root.text = "Connector (#{event.title})"
         }
       }
@@ -297,9 +312,44 @@ class Connector
     end
 
     def display_about_dialog
-      message_box(body_root) {
+      dialog {
+        grid_layout(2, false) {
+          margin_width 15
+          margin_height 15
+        }
+        
+        background :white
+        image ICON
         text 'About'
-        message "Connector #{VERSION}\n\n#{LICENSE}"
+        
+        label {
+          layout_data :center, :center, false, false
+          background :white
+          image ICON, height: 260
+        }
+        label {
+          layout_data :fill, :fill, true, true
+          background :white
+          text "Connector v#{VERSION} (Beta)\n\n#{LICENSE}\n\nConnector icon made by Freepik from www.flaticon.com"
+        }
+      }.open
+    end
+
+    def display_preferences_dialog
+      dialog {
+        grid_layout(2, false) {
+          margin_width 15
+          margin_height 15
+        }
+        text 'Preferences'
+        
+        label {
+          text 'Engine'
+          font style: :bold
+        }
+        radio_group {
+          selection bind(self, :engine )
+        }
       }.open
     end
     
