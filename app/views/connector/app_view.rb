@@ -44,7 +44,7 @@ class Connector
           display_about_dialog
         }
         on_preferences {
-          display_about_dialog
+          display_preferences_dialog
         }
       }
     }
@@ -108,7 +108,8 @@ class Connector
             on_key_pressed { |key_event|
               if key_event.keyCode == swt(:cr)
                 self.web_url = "https://duckduckgo.com/?q=#{web_url}" if web_url.include?(' ') || !web_url.include?('.')
-                current_tab_browser.url = web_url
+                self.web_url = "http://#{web_url}" unless web_url.start_with?('http')
+                current_tab_browser.set_url web_url
               end
             }
           }
@@ -187,7 +188,7 @@ class Connector
             text '&Action'
             menu_item {
               text '&Back'
-              accelerator(*(OS.mac? ? swt(COMMAND, '['.bytes.first) : swt(:alt, :arrow_left.bytes.first)))
+              accelerator(*(OS.mac? ? swt(COMMAND, '['.bytes.first) : swt(:alt, :arrow_left)))
               
               on_widget_selected {
                 current_tab_browser.back
@@ -195,7 +196,7 @@ class Connector
             }
             menu_item {
               text '&Forward'
-              accelerator(*(OS.mac? ? swt(COMMAND, ']'.bytes.first) : swt(:alt, :arrow_right.bytes.first)))
+              accelerator(*(OS.mac? ? swt(COMMAND, ']'.bytes.first) : swt(:alt, :arrow_right)))
               
               on_widget_selected {
                 current_tab_browser.forward
@@ -243,6 +244,19 @@ class Connector
             }
           }
           menu {
+            text '&Options'
+            menu_item(:radio) {
+              text '&Chromium'
+              accelerator swt(COMMAND, :shift, 'c'.bytes.first)
+              selection bind(self, :engine, on_read: ->(v) {v == 'chromium'}, on_write: ->(v) {v ? 'chromium' : 'webkit'})
+            }
+            menu_item(:radio) {
+              text '&Webkit'
+              accelerator swt(COMMAND, :shift, 'w'.bytes.first)
+              selection bind(self, :engine, on_read: ->(v) {v == 'webkit'}, on_write: ->(v) {v ? 'webkit' : 'chromium'})
+            }
+          }
+          menu {
             text '&Help'
             menu_item {
               text '&About...'
@@ -264,11 +278,12 @@ class Connector
         
         on_changing { |event|
           if !@starting
-            self.web_url = event.location
-            domain = self.web_url.sub(/https?:\/\//, '').split('/').first
+            self.web_url = current_tab_browser.url
+            domain = event.location.sub(/https?:\/\//, '').split('/').first
             current_tab_item.swt_tab_item.text = domain
             @tab_folder.redraw
             body_root.pack_same_size
+            @web_url_text.select_all
           end
         }
         
@@ -337,10 +352,7 @@ class Connector
 
     def display_preferences_dialog
       dialog {
-        grid_layout(2, false) {
-          margin_width 15
-          margin_height 15
-        }
+        grid_layout(2, false)
         text 'Preferences'
         
         label {
