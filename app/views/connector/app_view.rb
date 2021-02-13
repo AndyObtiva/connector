@@ -229,6 +229,7 @@ class Connector
               
               on_widget_selected {
                 @web_url_text.set_focus
+                @web_url_text.select_all
               }
             }
             menu_item {
@@ -306,6 +307,7 @@ class Connector
             current_tab_item.swt_tab_item.text = domain
             @tab_folder.redraw
             body_root.pack_same_size
+            @web_url_text.set_focus
             @web_url_text.select_all
           end
         }
@@ -348,6 +350,7 @@ class Connector
       # TODO look into not remaximizing by remembering the same size
       body_root.set_size display.bounds.width, display.bounds.height
       body_root.pack_same_size
+      @web_url_text.set_focus
       @web_url_text.select_all
     end
 
@@ -381,7 +384,7 @@ class Connector
         text 'Preferences'
         
         label {
-          text 'Engine'
+          text "Default Engine"
           font style: :bold
         }
         radio_group {
