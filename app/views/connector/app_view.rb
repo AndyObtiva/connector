@@ -46,6 +46,15 @@ class Connector
         on_preferences {
           display_preferences_dialog
         }
+        # Enable this when upgrading to glimmer-dsl-swt 4.18.x.y
+#         on_quit {
+#           exit(0)
+#         }
+        if OS.mac?
+          display.swt_display.system_menu.items.find {|mi| mi.id == swt(:id_quit)}.add_selection_listener {
+            exit(0)
+          }
+        end
       }
     }
 
@@ -66,9 +75,13 @@ class Connector
           vertical_spacing 0
         }
         # Replace example content below with custom shell content
-        minimum_size 1024, 768
+        minimum_size 640, 480
         image ICON
         text "Connector"
+        
+        on_swt_show { |event|
+          event.widget.set_size display.bounds.width, display.bounds.height
+        }
       
         composite {
           layout_data :fill, :center, true, false
@@ -183,6 +196,14 @@ class Connector
                 display_preferences_dialog
               }
             }
+            menu_item {
+              text 'E&xit'
+              accelerator swt(:alt, :f4)
+
+              on_widget_selected {
+                exit(0)
+              }
+            }
           }
           menu {
             text '&Action'
@@ -216,6 +237,7 @@ class Connector
               
               on_widget_selected {
                 @tab_folder.selection = (@tab_folder.selection_index + 1) % (@tab_folder.items.size - 1)
+                self.web_url = current_tab_browser.url
               }
             }
             menu_item {
@@ -224,6 +246,7 @@ class Connector
               
               on_widget_selected {
                 @tab_folder.selection = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
+                self.web_url = current_tab_browser.url
               }
             }
             menu_item {
@@ -321,9 +344,11 @@ class Connector
           text '+'
         }
       }
-      @tab_folder.redraw
-      body_root.pack_same_size
       @tab_folder.selection = new_tab.swt_tab_item
+      # TODO look into not remaximizing by remembering the same size
+      body_root.set_size display.bounds.width, display.bounds.height
+      body_root.pack_same_size
+      @web_url_text.select_all
     end
 
     def display_about_dialog
@@ -351,7 +376,7 @@ class Connector
     end
 
     def display_preferences_dialog
-      dialog {
+      dialog(body_root) {
         grid_layout(2, false)
         text 'Preferences'
         

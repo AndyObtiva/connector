@@ -11,3 +11,4 @@
 - History
 - connector-setup (to work across Rubies in RVM)
 - Have the engine option menu items switch the engine in the current tab (by disposing and recreating)
+- Show favicon on every tab

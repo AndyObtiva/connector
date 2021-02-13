@@ -18,3 +18,5 @@
 - Use Chromium Engine
 - Ability to change engine through Preferences
 - Ability to change engine through Options Menu
+- Implement Quit with CMD+Q
+- Start maximized to screen size
