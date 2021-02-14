@@ -20,3 +20,4 @@
 - Ability to change engine through Options Menu
 - Implement Quit with CMD+Q
 - Start maximized to screen size
+- Allow specifying ENGINE env var at command time to "webkit" or "chromium"

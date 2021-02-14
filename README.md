@@ -4,11 +4,11 @@ A minimalist open-source web browser built in [Ruby](https://www.ruby-lang.org) 
 
 ![Mac Screenshot](images/connector-mac.png)
 
-NOTE: this project was created primarily for personal use and has not had a release yet. Feel free to inspect its code to learn more about how to get started in building a web browser with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt).
+NOTE: this project was created primarily for personal use, so it has not had a packaged release. Feel free to inspect its code to learn more about how to get started in building a web browser with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt). The project mostly takes advantage of the [SWT Browser widget](https://github.com/AndyObtiva/glimmer-dsl-swt/blob/master/docs/reference/GLIMMER_GUI_DSL_SYNTAX.md#browser-widget), which has support for [Chromium](https://www.chromium.org/) and [Webkit](https://webkit.org/). That said, it is a simple wrapper that does not expose all web browser engine features automatically, so quite a bit of extra work is needed to bring it up to par with common browsers, but it's 50% of the way there out of the box, which is very useful if someone needs to slap a custom web browser together in less than a day.
 
 ## Features
 
-Unlike other web browsers, Connector is a multi-engine web browser, supporting both Chromium and Webkit, albeit running old versions of them at the moment.
+Unlike other web browsers, Connector is a multi-engine web browser, supporting both [Chromium](https://www.chromium.org/) and [Webkit](https://webkit.org/), albeit running old versions of them at the moment.
 
 ### Chromium Engine Support
 

@@ -34,6 +34,7 @@ class Connector
     #
     #
     before_body {
+      self.engine = ENV['ENGINE'] unless ENV['ENGINE'].to_s.empty?
       @starting = true
       @web_url = 'Enter Web Address'
       Display.app_name = 'Connector'
@@ -164,7 +165,7 @@ class Connector
               accelerator swt(COMMAND, 'n'.bytes.first)
               
               on_widget_selected {
-                app_view.open
+                app_view(engine: engine).open
               }
             }
             menu_item(:separator)
@@ -173,9 +174,11 @@ class Connector
               accelerator swt(COMMAND, 'w'.bytes.first)
               
               on_widget_selected {
-                new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
-                current_tab_item.dispose
-                @tab_folder.selection = new_selection_index
+                if current_tab_item.swt_tab_item.text != '+'
+                  new_selection_index = (@tab_folder.selection_index - 1) % (@tab_folder.items.size - 1)
+                  current_tab_item.dispose
+                  @tab_folder.selection = new_selection_index
+                end
               }
             }
             menu_item {
@@ -228,8 +231,7 @@ class Connector
               accelerator swt(COMMAND, (OS.mac? ? 'l' : 'd').bytes.first)
               
               on_widget_selected {
-                @web_url_text.set_focus
-                @web_url_text.select_all
+                focus_web_url
               }
             }
             menu_item {
@@ -300,20 +302,14 @@ class Connector
         layout_data :fill, :fill, true, true
         url "https://duckduckgo.com"
         
-        on_changing { |event|
-          if !@starting
+        browser_proxy.add_title_listener { |event|
+          ensure_tab_folder_layout do
+            body_root.text = "Connector (#{event.title})"
             self.web_url = current_tab_browser.url
             domain = web_url.sub(/https?:\/\//, '').split('/').first
             current_tab_item.swt_tab_item.text = domain
-            @tab_folder.redraw
-            body_root.pack_same_size
-            @web_url_text.set_focus
-            @web_url_text.select_all
           end
-        }
-        
-        browser_proxy.add_title_listener { |event|
-          body_root.text = "Connector (#{event.title})"
+          focus_web_url
         }
       }
     end
@@ -331,27 +327,46 @@ class Connector
     end
     
     def add_tab_browser
-      @plus_tab_item.dispose
-      new_tab = nil
-      @tab_folder.content {
-        new_tab = tab_item {
-          fill_layout {
-            margin_width 0
-            margin_height 0
+      ensure_tab_folder_layout do
+        @plus_tab_item.dispose
+        new_tab = nil
+        @tab_folder.content {
+          new_tab = tab_item {
+            fill_layout {
+              margin_width 0
+              margin_height 0
+            }
+            text 'New Tab'
+            tab_browser
           }
-          text 'New Tab'
-          tab_browser
+          @plus_tab_item = tab_item {
+            text '+'
+          }
         }
-        @plus_tab_item = tab_item {
-          text '+'
-        }
-      }
-      @tab_folder.selection = new_tab.swt_tab_item
-      # TODO look into not remaximizing by remembering the same size
-      body_root.set_size display.bounds.width, display.bounds.height
-      body_root.pack_same_size
-      @web_url_text.set_focus
-      @web_url_text.select_all
+        @tab_folder.selection = new_tab.swt_tab_item
+      end
+      focus_web_url
+    end
+    
+    def focus_web_url
+      if @web_url_text.swt_widget == display.focus_control
+        @web_url_text.select_all
+      else
+        @web_url_text.set_focus
+      end
+    end
+    
+    def ensure_tab_folder_layout(&operation)
+      bounds = body_root.bounds
+      minimum_size = body_root.get_minimum_size
+      body_root.set_minimum_size(bounds.width, bounds.height)
+      operation.call
+      @tab_folder.layout
+      @tab_folder.pack
+      body_root.layout
+      body_root.pack
+      body_root.set_minimum_size(minimum_size)
+      body_root.setBounds(bounds)
     end
 
     def display_about_dialog
@@ -373,7 +388,7 @@ class Connector
         label {
           layout_data :fill, :fill, true, true
           background :white
-          text "Connector v#{VERSION} (Beta)\n\n#{LICENSE}\n\nConnector icon made by Freepik from www.flaticon.com"
+          text "Connector v#{VERSION} (Alpha)\n\n#{LICENSE}\n\nConnector icon made by Freepik from www.flaticon.com"
         }
       }.open
     end

@@ -13,3 +13,11 @@
 - Have the engine option menu items switch the engine in the current tab (by disposing and recreating)
 - Show favicon on every tab
 - Change Home Page
+- CMD+ENTER (ALT+ENTER) Address Bar opens same address in new tab
+- Reorder tabs
+- When closing the last tab in a window, close the window
+- When opening a new window, ensure it uses the default engine
+
+## Issues
+
+- Prevent double select-all when adding a new tab and starting to type in the address bar
