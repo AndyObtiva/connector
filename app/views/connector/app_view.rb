@@ -216,6 +216,7 @@ class Connector
               
               on_widget_selected {
                 current_tab_browser.back
+                self.web_url = current_tab_browser.url
               }
             }
             menu_item {
@@ -224,6 +225,7 @@ class Connector
               
               on_widget_selected {
                 current_tab_browser.forward
+                self.web_url = current_tab_browser.url
               }
             }
             menu_item {
