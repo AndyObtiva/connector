@@ -114,7 +114,7 @@ class Connector
             text bind(self, :web_url)
             focus true # initial focus
             
-            on_focus_gained {
+            on_mouse_up {
               @web_url_text.select_all
             }
             
@@ -305,11 +305,13 @@ class Connector
         url "https://duckduckgo.com"
         
         browser_proxy.add_title_listener { |event|
-          ensure_tab_folder_layout do
-            body_root.text = "Connector (#{event.title})"
-            self.web_url = current_tab_browser.url
-            domain = web_url.sub(/https?:\/\//, '').split('/').first
-            current_tab_item.swt_tab_item.text = domain
+          body_root.text = "Connector (#{event.title})"
+          self.web_url = current_tab_browser.url
+          domain = web_url.sub(/https?:\/\//, '').split('/').first
+          if current_tab_item.swt_tab_item.text != domain
+            ensure_tab_folder_layout do
+              current_tab_item.swt_tab_item.text = domain
+            end
           end
           focus_web_url
         }
@@ -355,6 +357,7 @@ class Connector
         @web_url_text.select_all
       else
         @web_url_text.set_focus
+        @web_url_text.select_all
       end
     end
     
@@ -363,7 +366,6 @@ class Connector
       minimum_size = body_root.get_minimum_size
       body_root.set_minimum_size(bounds.width, bounds.height)
       operation.call
-      @tab_folder.layout
       @tab_folder.pack
       body_root.layout
       body_root.pack
