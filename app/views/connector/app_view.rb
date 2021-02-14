@@ -1,4 +1,3 @@
-require 'pd'
 require 'glimmer-cw-browser-chromium'
 
 class Connector
@@ -129,6 +128,7 @@ class Connector
         }
         @tab_folder = tab_folder {
           layout_data :fill, :fill, true, true
+          foreground :black
           tab_item {
             fill_layout {
               margin_width 0
@@ -303,7 +303,7 @@ class Connector
         on_changing { |event|
           if !@starting
             self.web_url = current_tab_browser.url
-            domain = event.location.sub(/https?:\/\//, '').split('/').first
+            domain = web_url.sub(/https?:\/\//, '').split('/').first
             current_tab_item.swt_tab_item.text = domain
             @tab_folder.redraw
             body_root.pack_same_size
