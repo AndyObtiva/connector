@@ -19,6 +19,7 @@
 - Change Home Page
 - CMD+ENTER (ALT+ENTER) Address Bar opens same address in new tab
 - Reorder tabs
+- Zoom In/Zoom Out
 - When closing the last tab in a window, close the window
 - When opening a new window, ensure it uses the default engine
 - Explore the [jxbrowser](https://www.teamdev.com/jxbrowser) third-party SWT custom widget, which supports a much newer version of Chromium (version 84 today)
