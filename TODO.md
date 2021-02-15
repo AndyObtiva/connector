@@ -21,6 +21,7 @@
 - Reorder tabs
 - When closing the last tab in a window, close the window
 - When opening a new window, ensure it uses the default engine
+- Explore https://www.teamdev.com/jxbrowser third-party SWT custom widget, which supports a much newer version of Chromium (version 84 today)
 
 ## Issues
 
