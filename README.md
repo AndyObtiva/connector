@@ -1,6 +1,6 @@
 # <img src='https://raw.githubusercontent.com/AndyObtiva/connector/master/package/linux/Connector.png' height=64 /> Connector
 
-A minimalist open-source web browser built in [Ruby](https://www.ruby-lang.org) with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt)
+A minimalist open-source multi-engine web browser built in [Ruby](https://www.ruby-lang.org) with [Glimmer DSL for SWT](https://github.com/AndyObtiva/glimmer-dsl-swt)
 
 ![Mac Screenshot](images/connector-mac.png)
 
