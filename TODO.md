@@ -22,10 +22,11 @@
 - Zoom In/Zoom Out
 - When closing the last tab in a window, close the window
 - When opening a new window, ensure it uses the default engine
-- Explore the [jxbrowser](https://www.teamdev.com/jxbrowser) third-party SWT custom widget, which supports a much newer version of Chromium (version 84 today)
+- Explore the [jxbrowser](https://www.teamdev.com/jxbrowser) third-party SWT custom widget, which supports a much newer version of Chromium
 - Turn this app into a reusable custom shell, embeddable in other apps as a nested browser window.
 - Support Windows with Chromium and IE
 - Support Linux with Chromium and WebKitGTK (where available as per the [SWT FAQ](https://www.eclipse.org/swt/faq.php#browserwebkitgtk))
+- Navigate to hashmark URLs (like jumping to later sections in the same page)
 
 ## Issues
 
